@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import android.widget.Button;
 import android.widget.EditText;
-import androidx.appcompat.app.AlertDialog;
 public class MainActivity extends AppCompatActivity {
     ListView cityList;
     ArrayAdapter<String> cityAdapter;
     ArrayList<String> datalist;
 
-
+    int sel = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,29 +34,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         Button badd = findViewById(R.id.badd);
         Button bdelet = findViewById(R.id.bdelet);
 
-        final int[] sel = {-1};
 
-        cityList.setOnItemClickListener((p,v,i,id)-> sel[0]=i);
+        cityList.setOnItemClickListener((p,v,i,id) -> sel = i);
 
         badd.setOnClickListener(v -> {
-            EditText e = new EditText(this);
-            new AlertDialog.Builder(this).setView(e).setPositiveButton("OK",(d,w)->{
-                String s = e.getText().toString();
-                if(!s.isEmpty()){
-                    datalist.add(s);
-                    cityAdapter.notifyDataSetChanged();
-                }
-            }).setNegativeButton("Cancel",null).show();
+            String s = ((EditText)findViewById(R.id.inputCity)).getText().toString();
+            if(!s.isEmpty()){
+                datalist.add(s);
+                cityAdapter.notifyDataSetChanged();
+            }
         });
 
         bdelet.setOnClickListener(v -> {
-            if(sel[0]>=0){
-                datalist.remove(sel[0]);
-                sel[0] = -1;
+            if(sel >= 0){
+                datalist.remove(sel);
+                sel = -1;
                 cityAdapter.notifyDataSetChanged();
             }
         });
